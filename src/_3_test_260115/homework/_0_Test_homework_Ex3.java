@@ -1,4 +1,4 @@
-package _3_test_260115;
+package _3_test_260115.homework;
 
 public class _0_Test_homework_Ex3 {
     public static void main(String[] args) {
