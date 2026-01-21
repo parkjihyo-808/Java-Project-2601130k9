@@ -1,11 +1,11 @@
 package _7_test_260121.memberProject;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class _3_MainClass {
+public class _3_MainClass_복제_ArrayList_버전 {
 
     // 260120_실습4_풀이_업그레이드_임시저장파일_추가, 순서1
     // 우리가 저장할 파일의 이름 미리 지정
@@ -17,10 +17,7 @@ public class _3_MainClass {
         // 260121_업그레이드_배열에서ArrayList_변경, 순서1
         //  변경, 5명 고정이 아니라, 동적으로 증가하는 ArrayList
         // 다형성 적용 : List(인터페이스) 큰 타입으로 선언 , = ArrayList 생성.
-//        List<_3_MemberBase> members = new ArrayList<>();
-
-        // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서1
-        Map<String,_3_MemberBase> members = new HashMap<>();
+        List<_3_MemberBase> members = new ArrayList<>();
 
         //최대 5명까지 저장 가능한 배열 생성.
         // 260121_업그레이드_배열에서ArrayList_변경, 순서1-2
@@ -34,8 +31,6 @@ public class _3_MainClass {
 
         // 260121_업그레이드_배열에서ArrayList_변경, 순서6
         // 프로그램 최초 실행시, 파일에서 먼저 파일 불러오기.
-
-        // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서2
         loadMembers(members);
 
         // 260120_실습4_풀이_로그인한_유저_표기추가, 순서1
@@ -88,19 +83,11 @@ public class _3_MainClass {
 //                        System.out.println("정원초과, 가입 불가입니다.");
 //                        break;
 //                    }
-
                     System.out.println("이름: ");
                     String name = sc.nextLine();
 
                     System.out.println("이메일: ");
                     String email = sc.nextLine();
-
-                    // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서3
-                    // 이메일 중복 검사
-                    if(members.containsKey(email)) {
-                        System.out.println("이미 가입된 이메일입니다.");
-                        break;
-                    }
 
                     // 260120_실습4_풀이, 순서7, 패스워드 정보도 받기.
                     System.out.println("패스워드: ");
@@ -119,10 +106,7 @@ public class _3_MainClass {
                     // 배열에 저장.
                     // 260121_업그레이드_배열에서ArrayList_변경, 순서3
 //                    members[count] = newMember;
-
-                    // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서3-2
-//                    members.add(newMember);
-                    members.put(email, newMember);
+                    members.add(newMember);
                     // 인터페이스 메서드 호출
                     newMember.join();
 
@@ -135,8 +119,6 @@ public class _3_MainClass {
                     // 260121_업그레이드_배열에서ArrayList_변경, 순서3-3
                     //saveMembers(members, count);
                     // 260121_업그레이드_배열에서ArrayList_변경, 순서3-4, 기존 saveMembers 변경.
-
-                    // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서3-3
                     saveMembers(members);
                     break;
 
@@ -146,10 +128,7 @@ public class _3_MainClass {
                 case 2:
                     // 260121_업그레이드_배열에서ArrayList_변경, 순서4-2
 //                    if (count == 0) {
-
-                    // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서4
-//                    if (members.size() == 0) {
-                    if (members.isEmpty()) {
+                    if (members.size() == 0) {
                         System.out.println("가입된 회원이 없습니다. ");
                     } else {
 //                        System.out.println("\n 총회원수 : " + count + "명입니다.");
@@ -157,16 +136,10 @@ public class _3_MainClass {
                         System.out.println("\n 총회원수 : " + members.size() + "명입니다.");
                         // 260121_업그레이드_배열에서ArrayList_변경, 순서4-4
 //                        for (int i = 0; i < count; i++) {
-
-                        // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서4-2
-//                        for (int i = 0; i <  members.size(); i++) {
-                        for (_3_MemberBase member: members.values()) {
+                        for (int i = 0; i <  members.size(); i++) {
                             // 260121_업그레이드_배열에서ArrayList_변경, 순서4-5
 //                            members[i].showInfo(); // 다형성 (오버라이딩된 메서드 실행)
-
-                            // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서4-3
-//                            members.get(i).showInfo();
-                            member.showInfo();
+                            members.get(i).showInfo();
                         }
                     }
                     break;
@@ -192,12 +165,7 @@ public class _3_MainClass {
 
                     // 260121_업그레이드_배열에서ArrayList_변경, 순서5
 //                    for (int i = 0; i < count; i++) {
-
-                    // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서5
-//                    for (_3_MemberBase member : members) {
-                        if(members.containsKey(inputEmail)) {
-                            // 로그인시, 입력한 이메일 정보가, Map 들어가 있다면, 로직 실행.
-                            _7_test_260121.memberProject._3_MemberBase member = members.get(inputEmail);
+                    for (_3_MemberBase member : members) {
                         // 임시 메모리 상에 저장된 회원의 이메일과, 패스워드 확인하는 절차.
                         // 저장된 회원 한명씩 꺼내서, member 에 담아두고,
                         // 입력된 이메일, 패스워드와,,  불러온  이메일, 패스워드 일치 여부 확인?
@@ -223,8 +191,7 @@ public class _3_MainClass {
                             loggedInMember = member;
                             break;
                         } // if 닫기
-                            // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서5-2
-                    } // for 닫기. -> if 닫기 변경.
+                    } // for 닫기.
 
                     // 로그인 실패인 경우,
                     if(!isLogin) {
@@ -256,10 +223,7 @@ public class _3_MainClass {
 
     // 260121_업그레이드_배열에서ArrayList_변경, 순서3-5
 //    public static void saveMembers(_3_MemberBase[] members, int count){
-
-    // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서3-4
-//    public static void saveMembers(List<_3_MemberBase> members){
-    public static void saveMembers(Map<String,_3_MemberBase> members){
+    public static void saveMembers(List<_3_MemberBase> members){
         // BufferedWriter : 버퍼를 사용해 파일 쓰기 속도를 높여줍니다.
         BufferedWriter bw = null;
 
@@ -276,11 +240,7 @@ public class _3_MainClass {
 
             // 260121_업그레이드_배열에서ArrayList_변경, 순서3-6
 //            for(int i = 0; i < count; i++) {
-
-            // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서3-5
-//            for(_3_MemberBase m: members) {
-            // members.values() -> 키 : 이메일, 값 : 멤버 객체
-            for(_3_MemberBase m: members.values()) {
+            for(_3_MemberBase m: members) {
                 // 260121_업그레이드_배열에서ArrayList_변경, 순서3-7
 //                _3_MemberBase m = members[i];
 
@@ -322,10 +282,7 @@ public class _3_MainClass {
 
     // 260121_업그레이드_배열에서ArrayList_변경, 순서6-2
 //    public static int loadMembers(_3_MemberBase[] members){
-//    public static int loadMembers(List<_3_MemberBase> members){
-
-    // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서2-2
-    public static int loadMembers(Map<String, _3_MemberBase> members){
+    public static int loadMembers(List<_3_MemberBase> members){
         // 물리 파일 : FILE_NAME = members.txt 파일에 접근하고, 가져오는 기능을 담당하는 클래스를 이용.
         // 담당 클래스 : File
         // 스캐너 도구를 사용 하듯이,
@@ -384,10 +341,7 @@ public class _3_MainClass {
 
                     // 260121_업그레이드_배열에서ArrayList_변경, 순서6-4
 //                    members[loadCount] = new _3_NormalMember(name,email,password,age);
-//
-                    // 260121_업그레이드_ArrayList에서_HashMap으로_변경, 순서2-3
-                    members.put(email,new _3_NormalMember(name,email,password,age));
-//                      members.add(new _3_NormalMember(name,email,password,age));
+                      members.add(new _3_NormalMember(name,email,password,age));
 
                     // 파일에서 불러온 사람의 숫자를 확인하는 상태 변수 카운트 1증가.
                     loadCount++;
