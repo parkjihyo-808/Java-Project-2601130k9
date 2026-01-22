@@ -26,10 +26,12 @@ public class _3_MainClass {
                 System.out.println("로그인 한 유저 : " + loggedInMember.getEmail());
                 System.out.println("-------------------------------------------");
                 // 260122_기능추가_수정_순서2-2
-                System.out.println("1. 회원가입 2. 목록조회 3. 로그아웃 4. 회원수정 5. 종료");
+                // 260122_기능추가_검색_순서1
+                System.out.println("1. 회원가입 2. 목록조회 3. 로그아웃 4. 회원수정  5. 회원검색 6. 종료");
             } else {
                 // 260122_기능추가_수정_순서2-3
-                System.out.println("1. 회원가입 2. 목록조회 3. 로그인 4. 회원수정 5. 종료");
+                // 260122_기능추가_검색_순서2
+                System.out.println("1. 회원가입 2. 목록조회 3. 로그인 4. 회원수정 5. 회원검색 6. 종료");
             }
             System.out.println("메뉴 선택 >>");
 
@@ -194,8 +196,56 @@ public class _3_MainClass {
                     }
                     break;
 
-                // 260122_기능추가_수정_순서3-2
+                // 260122_기능추가_검색_순서3
                 case 5:
+                    System.out.println("\n===회원 검색====");
+                    System.out.println("1. 이메일(ID)로 검색 정확히 일치");
+                    System.out.println("2. 이름으로 검색 (포함된 이름)");
+                    System.out.println("번호 선택 >>");
+
+                    String searchType = sc.nextLine();
+
+                    if(searchType.equals("1")) {
+                        // 이메일로 검색
+                        // HashMap key로 바로 검색 가능.
+                        System.out.println("검색할 이메일 입력 : ");
+                        String searchEmail = sc.nextLine();
+
+                        if(members.containsKey(searchEmail)) {
+                            System.out.println("\n 검색 결과");
+                            members.get(searchEmail).showInfo();
+                        } else {
+                            System.out.println("해당 이메일의 회원이 업습니다.");
+                        }
+
+                    } else if (searchType.equals("2")) {
+                        // 이름으로 검색.
+                        System.out.println("검색할 이름 입력:" );
+                        String searchName= sc.nextLine();
+
+                        // 상태변수, 검색 되었는지 여부
+                        boolean isFound = false;
+                        System.out.println("검색중....");
+
+                        for(_3_MemberBase m: members.values()) {
+                            if(m.getName().contains(searchName)) {
+                                m.showInfo();
+                                isFound = true;
+                            }
+                        } // for 닫기
+                        // 없을 경우.
+                        if(!isFound) {
+                            System.out.println("회원을 찾을수 없습니다. ");
+                        }
+
+                    } else {
+                        System.out.println("잘못된 입력입니다.");
+                    }
+                    break;
+
+                    // 260122_기능추가_수정_순서3-2
+                // 260122_기능추가_검색_순서3-2
+                case 6:
                     System.out.println("프로그램을 종료합니다. ");
                     // 스캐너 자원 반납
                     sc.close();
