@@ -115,6 +115,10 @@ public class _3_MainClass extends JFrame {
             // 260123_화면_스윙_변경__순서5-6, 잠시대기
             // 버튼 이벤트 핸들러(리스너 등록)
             // 내부에 리스너를 처리하는 클래스를 만들어서 재사용을 하기.
+            btnList.addActionListener(new ActionHandler());
+            // 회원가입 , 이벤트 처리 리스너 추가하기.
+            // 260123_화면_스윙_변경__순서9-3
+            btnJoin.addActionListener(new ActionHandler());
 
             // 260123_화면_스윙_변경__순서5-7
             // 버튼을 패널에 붙이기 작업.
@@ -152,7 +156,8 @@ public class _3_MainClass extends JFrame {
             // 그리고, 각 요소가 무엇인지 정확히 분기.
             if (source == btnJoin) {
                 // 아직 기능은 미구현, 메서드 명만 표기.
-//                handleJoin();
+                // 260123_화면_스윙_변경__순서9-2
+                handleJoin();
             } else if (source == btnList) {
                 handleList();
             } else if (source == btnLoginLogout) {
@@ -176,6 +181,69 @@ public class _3_MainClass extends JFrame {
         displyArea.setCaretPosition(displyArea.getDocument().getLength());
     }
 
+    // 260123_화면_스윙_변경__순서9
+    // 1. 회원 가입
+    private void handleJoin() {
+        // 기존 : 스캐너에서, 입력된 내용(콘솔)을 스캐너로 가져와서, 처리 .
+        // 변경 : 스윙의 텍스트필드에서 내용을 가져와서, 처리.
+        // 회원가입시 필요한 입력 필드를 만들기.
+        JTextField nameField = new JTextField();
+        JTextField emailField = new JTextField();
+        JPasswordField passField = new JPasswordField();
+        JTextField ageField = new JTextField();
+
+        // 타입 : Object, 배열 생성, 위의 입력된 데이터를 가지고 있기.
+        // 배열 요소 구성된 타입을 확인 해보면, 문자열과, UI 요소 구성.
+        Object[] message = {
+                "이름 : ", nameField,
+                "이메일 : ", emailField,
+                "패스워드 : ", passField,
+                "나이 : ", ageField
+        };
+
+        //자바스크립트 치면, alert() 경고창, confirm(), 출력하는 함수들.
+        // 자바 : 다이얼로그 창이라고 해서, 간단히 화면에 출력해주는 기능들.
+        // this : 이 다이얼로그 창 화면을 어디에 출력 하니.? 현재 frame 창
+        // message : 입력된 내용.
+        // "회원가입" : 다이얼로그 창 제목.
+        //  JOptionPane.OK_CANCEL_OPTION : 확인 0, 취소 2
+        int option = JOptionPane.showConfirmDialog
+                (this, message,"회원가입",JOptionPane.OK_CANCEL_OPTION);
+
+        // 회원가입이면,
+        if(option == JOptionPane.OK_OPTION){
+            // 텍스트 필드에 입력되었던 값을 가져오기.
+            String name = nameField.getText();
+            String email = emailField.getText();
+            String password = new String(passField.getPassword());
+            String ageStr = ageField.getText();
+
+            // 중복체크 및 객체 생성
+            if(members.containsKey(email)) {
+                // 통째로 이용하기, 자바 버전의 경고창(alert())
+                JOptionPane.showMessageDialog(this, "이미가입된 이메일입니다");
+                // 중복시, 메서드 나가기.
+                return;
+            }
+
+            // 중복이 안되면 로직 처리.
+            try{
+                int age = Integer.parseInt(ageStr);
+                //원래 기존 멤버에 객체 등록 하면 됨.
+                _3_NormalMember newMember = new _3_NormalMember(name,email,password,age);
+                //  기존에 파일에 쓰기 기능.
+                saveMembers(members);
+                printLog("회원 가입 완료 : " + email);
+
+            } catch (NumberFormatException ex) {
+                // 자바 버전 경고창.
+                JOptionPane.showMessageDialog(this, "나이는 숫자만 입력하세요.");
+            }
+
+        }
+    }
+
+    // 260123_화면_스윙_변경__순서8,
     // 2. 목록조회
     private void handleList() {
         displyArea.setText(""); // 최초에 항상 기존 내용 다지우고, 새로 불러오는 형식.
@@ -195,6 +263,7 @@ public class _3_MainClass extends JFrame {
 
 
 
+    // 260123_화면_스윙_변경__순서10, 수정 필요함.
     public static void saveMembers(Map<String, _3_MemberBase> members){
         BufferedWriter bw = null;
         try {
