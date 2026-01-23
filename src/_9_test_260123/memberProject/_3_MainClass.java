@@ -1,20 +1,136 @@
 package _9_test_260123.memberProject;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class _3_MainClass {
+// 260123_화면_스윙_변경__순서1
+// 해당 클래스가, JFrame 관련 그리기 도구를 사용하기 위해서, 상속.
+public class _3_MainClass extends JFrame {
 
     private static final String FILE_NAME = "members.txt";
 
-    public static void main(String[] args) {
+    // 260123_화면_스윙_변경__순서2
+    // 전역으로 사용할 멤버들 지정, 변수 지정.
+    private Map<String, _3_MemberBase> members = new HashMap<>();
+    // 로그인한 멤버 상태.
+    private _3_MemberBase loggedInMember = null;
 
-        Map<String, _3_MemberBase> members = new HashMap<>();
+    // 260123_화면_스윙_변경__순서2-2
+    // GUI 화면 구성 요소, 전역,
+    private JTextArea displyArea; // 결과 출력을 위한 텍스트 영역.
+    private JPanel buttonPanel; // 버튼들이 들어갈 패널
+    private JLabel statusLabel; // 현재 로그인 상태 표시
+
+    // 260123_화면_스윙_변경__순서2-3
+    // 버튼 정의,
+    private JButton btnJoin, btnList, btnLoginLogout, btnEdit, btnSearch, btnExit;
+    //private JButton btnList;
+
+    public static void main(String[] args) {
+        // 260123_화면_스윙_변경__순서3
+        // [GUI 변경] 메인 스레드에서 GUI 실행,
+        SwingUtilities.invokeLater(() -> {
+            new _3_MainClass();
+        });
+    }
+
+    // 260123_화면_스윙_변경__순서4
+    // _3_MainClass 생성자 정의.
+    public _3_MainClass() {
+
+        // 260123_화면_스윙_변경__순서4-2
+        // 부모 클래스의 생성자가 호출 후, 자식 클래스의 생성자 호출.
+        // 부모 클래스 ( JFrame) , 창의 제목을 설정.
+        super("회원 관리 시스템 ver 3.2(GUI버전)");
+
+        // 데이터 로드 , 기존 코드, 파일에서, 회원 정보를 불러오기.
         loadMembers(members);
 
-        _3_MemberBase loggedInMember = null;
+        // 260123_화면_스윙_변경__순서4-3
+        // UI 초기화하는 함수를 호출.
+        // 아직 미생성.
+        initUI();
+
+        // 260123_화면_스윙_변경__순서4-4
+        setSize(600, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+        // 화면 중앙 배치
+        setLocationRelativeTo(null);
+    } // _3_MainClass()생성자 닫기.
+
+        // 260123_화면_스윙_변경__순서5
+        //[GUI 변경] UI 화면 구성 메서드
+        // 여기가 메인, 나머지 기능 구현은 기존 꺼 재사용함.
+        // 화면작업 메인.
+        private void initUI() {
+            // 260123_화면_스윙_변경__순서5-2
+            setLayout(new BorderLayout()); // 동,서,남,북, 중앙 배치 관리자.
+
+            // 상단
+            // 260123_화면_스윙_변경__순서5-3
+            // 1. 상단 상태 표시줄
+            statusLabel = new JLabel("로그인 상태 : 로그아웃 됨", SwingConstants.CENTER);
+            // 글꼴 옵션,
+            statusLabel.setFont(new Font("맑은 고딕",Font.BOLD, 14));
+            // 경계 옵션,
+            statusLabel.setBorder(BorderFactory.createEmptyBorder(10,0,10,0));
+            // 필수,
+            add(statusLabel, BorderLayout.NORTH);
+
+
+            // 가운데
+            // 260123_화면_스윙_변경__순서5-4
+            // 2. 중앙 텍스트 영역(콘솔 출력 대체)
+            displyArea = new JTextArea();
+            displyArea.setEditable(false);// 수정 못하게 방지
+            // 글꼴 옵션
+            displyArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+            // JTextArea 내부에 공간이 다차면, 스크롤 기능이 생기게 설정.
+            add(new JScrollPane(displyArea), BorderLayout.CENTER);
+
+
+            //하단,
+            // 260123_화면_스윙_변경__순서5-5
+            // 3. 하단 버튼 패널
+            buttonPanel = new JPanel();
+            buttonPanel.setLayout(new GridLayout(2,3,5,5));
+
+            // 버튼 생성, 초기화, (전역에서 선언 후, 이 메서드 안에서 초기화해서 사용함.)
+            btnJoin = new JButton("1 회원가입");
+            btnList = new JButton("2 목록조회");
+            btnLoginLogout = new JButton("3 로그인"); //초깃값, 로그인을 하면, 로그 아웃으로 보일 예정.
+            btnEdit= new JButton("4 회원수정");
+            btnSearch = new JButton("5 회원검색");
+            btnExit = new JButton("6 종료");
+            // 삭제 기능은 완성 후, 실습으로 제시.
+//            btnJoin = new JButton("1 회원가입");
+
+            // 260123_화면_스윙_변경__순서5-6, 잠시대기
+            // 버튼 이벤트 핸들러(리스너 등록)
+            // 내부에 리스너를 처리하는 클래스를 만들어서 재사용을 하기.
+
+            // 260123_화면_스윙_변경__순서5-7
+            // 버튼을 패널에 붙이기 작업.
+            buttonPanel.add(btnJoin);
+            buttonPanel.add(btnList);
+            buttonPanel.add(btnLoginLogout);
+            buttonPanel.add(btnEdit);
+            buttonPanel.add(btnSearch);
+            buttonPanel.add(btnExit);
+
+            // 260123_화면_스윙_변경__순서5-8
+            // 버튼 패널, 프레임 하단에 배치
+            add(buttonPanel, BorderLayout.SOUTH);
+
+            // 260123_화면_스윙_변경__순서5-9
+            // 버튼들의 초기 상태 결정. 임시 메서드 설정,
+            updateButtonState();
+        }
 
         Scanner sc = new Scanner(System.in);
 
