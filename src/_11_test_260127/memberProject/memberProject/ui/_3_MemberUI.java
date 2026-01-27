@@ -30,7 +30,8 @@ public class _3_MemberUI extends JFrame {
 
         // UI 구성, 재조립, 화면 그리기 작업,
         // 미구현
-//        initUI();
+        // 260127_리팩토링_코드정리_순서23
+        initUI();
 
         setSize(600, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
